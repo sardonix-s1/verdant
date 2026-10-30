@@ -1,5 +1,7 @@
 export type Kind = 'good' | 'quit' | 'task' | 'goal'
 export type Freq = 'daily' | 'weekdays' | 'times_per_week'
+export type Gender = 'male' | 'female'
+export type PenaltyMode = 'off' | 'soft' | 'forfeit'
 
 export interface Habit {
   id: string
@@ -25,6 +27,7 @@ export interface Log {
   log_date: string
   done: boolean
   value: number | null
+  created_at?: string
 }
 
 export interface Profile {
@@ -43,7 +46,14 @@ export interface Profile {
   intensity: string
   notif_enabled: boolean
   consent_at: string | null
+  privacy_at: string | null
   onboarded: boolean
+  gender: Gender | null
+  motivation: string | null
+  chronotype: string | null
+  why: string | null
+  obstacles: string[]
+  penalty_mode: PenaltyMode
 }
 
 export interface Goal {
@@ -66,4 +76,30 @@ export interface Note {
   note_date: string
   body: string
   created_at: string
+}
+
+export interface LedgerRow {
+  id: string
+  ref: string
+  kind: string
+  xp: number
+  coins: number
+  note: string | null
+  created_at: string
+}
+
+export interface Reward {
+  id: string
+  title: string
+  emoji: string | null
+  cost: number
+  claimed_at: string | null
+}
+
+export interface Penalty {
+  id: string
+  title: string
+  habit_id: string | null
+  for_date: string
+  done: boolean
 }

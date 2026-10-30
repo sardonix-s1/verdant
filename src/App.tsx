@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactElement } from 'react'
+import { useEffect, useState, type CSSProperties, type ReactElement } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { configured, supabase } from './lib/supabase'
 import { DataProvider, useData } from './lib/data'
@@ -7,17 +7,17 @@ import { doneIdsOn, isDue } from './lib/logic'
 import { useReminders } from './lib/reminders'
 import { useNow } from './lib/useNow'
 import type { Habit } from './lib/types'
-import { IcHabits, IcPlan, IcProgress, IcToday, IcUser, Toasts } from './components/ui'
+import { FxLayer, IcCoach, IcGift, IcPath, IcToday, IcUser, Toasts } from './components/ui'
 import HabitForm from './components/HabitForm'
 import Auth from './screens/Auth'
 import Onboarding from './screens/Onboarding'
 import Today from './screens/Today'
-import Plan from './screens/Plan'
-import Habits from './screens/Habits'
-import Progress from './screens/Progress'
+import Path from './screens/Path'
+import Coach from './screens/Coach'
+import Rewards from './screens/Rewards'
 import Settings from './screens/Settings'
 
-type Tab = 'today' | 'plan' | 'habits' | 'progress' | 'profile'
+type Tab = 'today' | 'path' | 'coach' | 'rewards' | 'profile'
 
 function Shell() {
   const { profile, habits, logs } = useData()
@@ -35,9 +35,9 @@ function Shell() {
 
   const tabs: { id: Tab; label: string; icon: ReactElement }[] = [
     { id: 'today', label: 'Сегодня', icon: <IcToday /> },
-    { id: 'plan', label: 'План', icon: <IcPlan /> },
-    { id: 'habits', label: 'Привычки', icon: <IcHabits /> },
-    { id: 'progress', label: 'Прогресс', icon: <IcProgress /> },
+    { id: 'path', label: 'Путь', icon: <IcPath /> },
+    { id: 'coach', label: 'Коуч', icon: <IcCoach /> },
+    { id: 'rewards', label: 'Награды', icon: <IcGift /> },
     { id: 'profile', label: 'Профиль', icon: <IcUser /> },
   ]
 
@@ -46,15 +46,16 @@ function Shell() {
 
   return (
     <div className="app">
-      <div className="glow" key={tab} aria-hidden="true" />
+      <div className="ambient" aria-hidden="true"><i /><i /></div>
       <main>
         {tab === 'today' && <Today onAdd={openNew} onEdit={openEdit} />}
-        {tab === 'plan' && <Plan />}
-        {tab === 'habits' && <Habits onAdd={openNew} onEdit={openEdit} />}
-        {tab === 'progress' && <Progress />}
+        {tab === 'path' && <Path onAdd={openNew} onEdit={openEdit} />}
+        {tab === 'coach' && <Coach />}
+        {tab === 'rewards' && <Rewards />}
         {tab === 'profile' && <Settings />}
       </main>
-      <nav className="tabbar" aria-label="Основная навигация">
+      <nav className="tabbar" aria-label="Основная навигация" style={{ '--n': tabs.findIndex((t) => t.id === tab) } as CSSProperties}>
+        <span className="pill" aria-hidden="true" />
         {tabs.map((t) => (
           <button key={t.id} className={tab === t.id ? 'on' : ''} aria-current={tab === t.id ? 'page' : undefined} onClick={() => setTab(t.id)}>
             <span className="ico">
@@ -100,6 +101,7 @@ export default function App() {
         </DataProvider>
       )}
       <Toasts />
+      <FxLayer />
     </>
   )
 }
